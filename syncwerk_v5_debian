@@ -750,7 +750,7 @@ if [ ${SYNCWERK_SERVER_PROFESSIONAL} = "enabled" ]
     if [ $(getconf LONG_BIT) = "64" ]
       then
 
-       wget https://download.syncwerk.com/server/community/linux/syncwerk-server_5.1.4_x86-64.tar.gz -O syncwerk-server_latest_x86-64.tar.gz
+       wget https://github.com/frozen1900/syncwerk-server-installer/raw/master/syncwerk-server_5.1.4_x86-64.tar.gz -O syncwerk-server_latest_x86-64.tar.gz
        tountar="syncwerk-server_latest_x86-64.tar.gz"
     else
        curl -OL https://download.syncwerk.com/syncwerk-server_latest_${ARCH}.tar.gz
@@ -761,7 +761,6 @@ if [ ${SYNCWERK_SERVER_PROFESSIONAL} = "enabled" ]
     SYNCWERK_SERVER_VERSION=$(basename ${SYNCWERK_SERVER_HOME}/syncwerk-server-* | awk -F'-' ' { print $3 }')
     mv $tountar installed/syncwerk-server_${SYNCWERK_SERVER_VERSION}_${ARCH}.tar.gz
     SYNCWERK_SERVER_INSTALL_PATH=${SYNCWERK_SERVER_HOME}/syncwerk-server-${SYNCWERK_SERVER_VERSION}
-    mv /opt/syncwerk/seafile-server-5.1.4/ /opt/syncwerk/syncwerk-server-5.1.4/
 fi
 }
 
