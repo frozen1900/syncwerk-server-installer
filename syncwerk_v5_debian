@@ -761,6 +761,7 @@ if [ ${SYNCWERK_SERVER_PROFESSIONAL} = "enabled" ]
     SYNCWERK_SERVER_VERSION=$(basename ${SYNCWERK_SERVER_HOME}/syncwerk-server-* | awk -F'-' ' { print $3 }')
     mv $tountar installed/syncwerk-server_${SYNCWERK_SERVER_VERSION}_${ARCH}.tar.gz
     SYNCWERK_SERVER_INSTALL_PATH=${SYNCWERK_SERVER_HOME}/syncwerk-server-${SYNCWERK_SERVER_VERSION}
+    mv /opt/syncwerk/seafile-server-5.1.4/ /opt/syncwerk/syncwerk-server-5.1.4/
 fi
 }
 
