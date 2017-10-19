@@ -22,6 +22,7 @@
 set -ex
 
 OS=$(lsb_release -c | awk '{ print $2 }')
+hostname_install=$(hostname -f)
 
 function ensure-we-are-running-the-installer-on-a-supported-operating-system {
 if [[ ${OS} != stretch && ${OS} != jessie && ${OS} != wheezy ]] ; then
@@ -70,7 +71,7 @@ function setup-letsencrypt {
 if [ ${OS} = "stretch" ]
   then
     apt-get install dehydrated -y
-    echo $(hostname -f) | tee /etc/dehydrated/domains.txt
+    echo $hostname_install | tee /etc/dehydrated/domains.txt
 grep acme-challenge /etc/nginx/conf.d/syncwerk.conf || sed -i '/.*location \/ {/i \
   location \/.well-known\/acme-challenge {\
       alias /var/lib/dehydrated/acme-challenges;\
@@ -82,7 +83,7 @@ else
   tar xzf dehydrated.tar.gz
   rm dehydrated.tar.gz
   ln -sf dehydrated-0.3.1 dehydrated
-  echo $(hostname -f) | tee /opt/dehydrated/domains.txt
+  echo $hostname_install | tee /opt/dehydrated/domains.txt
   mkdir -p /var/www/dehydrated
 grep acme-challenge /etc/nginx/conf.d/syncwerk.conf || sed -i '/.*location \/ {/i \
   location \/.well-known\/acme-challenge {\
@@ -108,13 +109,13 @@ sed -i '/.*ssl_certificate.*/ s/^#*/#/' /etc/nginx/conf.d/syncwerk.conf
 if [ ${OS} = "stretch" ]
   then
 grep "dehydrated/certs" /etc/nginx/conf.d/syncwerk.conf || eval "sed -i '/.*  ssl on;/a \ \
-  ssl_certificate \/var\/lib\/dehydrated\/certs\/$(hostname -f)\/fullchain.pem;\n \
-  ssl_certificate_key \/var\/lib\/dehydrated\/certs\/$(hostname -f)\/privkey.pem;\
+  ssl_certificate \/var\/lib\/dehydrated\/certs\/$hostname_install\/fullchain.pem;\n \
+  ssl_certificate_key \/var\/lib\/dehydrated\/certs\/$hostname_install\/privkey.pem;\
   ' /etc/nginx/conf.d/syncwerk.conf"
 else
 grep "dehydrated/certs" /etc/nginx/conf.d/syncwerk.conf || eval "sed -i '/.*  ssl on;/a \ \
-  ssl_certificate \/opt\/dehydrated\/certs\/$(hostname -f)\/fullchain.pem;\n \
-  ssl_certificate_key \/opt\/dehydrated\/certs\/$(hostname -f)\/privkey.pem;\
+  ssl_certificate \/opt\/dehydrated\/certs\/$hostname_install\/fullchain.pem;\n \
+  ssl_certificate_key \/opt\/dehydrated\/certs\/$hostname_install\/privkey.pem;\
   ' /etc/nginx/conf.d/syncwerk.conf"
 fi
 }
